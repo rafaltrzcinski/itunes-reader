@@ -1,0 +1,36 @@
+
+rootProject.appPlugins.each { apply plugin: it}
+
+def appConfiguration = rootProject.ext
+
+android {
+    compileSdkVersion appConfiguration.compileSdkVersion
+    defaultConfig {
+        applicationId "com.rafaltrzcinski.itunesreader"
+        minSdkVersion appConfiguration.minSdkVersion
+        targetSdkVersion appConfiguration.targetSdkVersion
+        versionCode appConfiguration.versionCode
+        versionName appConfiguration.versionName
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    androidExtensions {
+        experimental = true
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation appConfiguration.appDependencies.values()
+    testImplementation appConfiguration.testDependencies.values()
+    androidTestImplementation appConfiguration.androidTestDependencies.values()
+}
+

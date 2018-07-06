@@ -1,0 +1,60 @@
+static def getDate() {
+    def date = new Date()
+    def formattedDate = date.format('yyMMddHHmm')
+    return formattedDate
+}
+
+ext {
+    versionName = '1.0'
+    versionCode = getDate().toInteger()
+
+    minSdkVersion = 19
+    targetSdkVersion = 27
+    compileSdkVersion = 27
+
+    supportAppCompatVersion = '27.1.1'
+    constraintLayoutVersion = '1.1.2'
+    jUnitVersion = '4.12'
+    testRunnerVersion = '1.0.2'
+    espressoCoreVersion = '3.0.2'
+    okHttpVersion = '3.10.0'
+    mockitoVersion = '2.18.3'
+    mockitoKotlinVersion = '1.5.0'
+    constraintLayoutVersion = '1.0.2'
+    retrofitVersion = '2.4.0'
+    rxJavaVersion = '2.1.5'
+    rxAndroidVersion = '2.0.1'
+    cardViewVersion = '27.1.1'
+
+    appPlugins = [
+            'com.android.application',
+            'kotlin-android',
+            'kotlin-android-extensions'
+    ]
+
+    appDependencies = [
+            appCompatV7      : "com.android.support:appcompat-v7:${supportAppCompatVersion}",
+            kotlinStdLib     : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${kotlin_version}",
+            constraintLayout : "com.android.support.constraint:constraint-layout:${constraintLayoutVersion}",
+            recyclerView     : "com.android.support:recyclerview-v7:${supportAppCompatVersion}",
+            okHttp           : "com.squareup.okhttp3:okhttp:${okHttpVersion}",
+            okHttpLogger     : "com.squareup.okhttp3:logging-interceptor:${okHttpVersion}",
+            retrofit         : "com.squareup.retrofit2:retrofit:${retrofitVersion}",
+            retrofitConverter: "com.squareup.retrofit2:converter-gson:${retrofitVersion}",
+            retrofitAdapter  : "com.squareup.retrofit2:adapter-rxjava2:${retrofitVersion}",
+            rxJava           : "io.reactivex.rxjava2:rxjava:${rxJavaVersion}",
+            rxAndroid        : "io.reactivex.rxjava2:rxandroid:${rxAndroidVersion}",
+            cardView         : "com.android.support:cardview-v7:${cardViewVersion}"
+    ]
+
+    testDependencies = [
+            junit        : "junit:junit:${jUnitVersion}",
+            mockito      : "org.mockito:mockito-inline:${mockitoVersion}",
+            mockitoKotlin: "com.nhaarman:mockito-kotlin:${mockitoKotlinVersion}"
+    ]
+
+    androidTestDependencies = [
+            testRunner : "com.android.support.test:runner:${testRunnerVersion}",
+            espressCore: "com.android.support.test.espresso:espresso-core:${espressoCoreVersion}"
+    ]
+}
