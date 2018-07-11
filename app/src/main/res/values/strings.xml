@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Itunes-reader</string>
+    <string name="menu.option.local">Local</string>
+    <string name="menu.option.remote">Remote</string>
+    <string name="connection.error">Error</string>
+    <string name="connection.error.instruction">Something went wrong. Check your Internet connection and try again.</string>
+    <string name="action.retry">Retry</string>
+    <string name="action.cancel">Cancel</string>
 </resources>

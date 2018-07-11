@@ -25,6 +25,10 @@ ext {
     rxJavaVersion = '2.1.5'
     rxAndroidVersion = '2.0.1'
     cardViewVersion = '27.1.1'
+    gsonVersion = '2.8.5'
+    commonsIOVersion = '2.6'
+    lifecycleVersion = '1.1.1'
+    jodaTimeVersion = '2.10'
 
     appPlugins = [
             'com.android.application',
@@ -44,7 +48,11 @@ ext {
             retrofitAdapter  : "com.squareup.retrofit2:adapter-rxjava2:${retrofitVersion}",
             rxJava           : "io.reactivex.rxjava2:rxjava:${rxJavaVersion}",
             rxAndroid        : "io.reactivex.rxjava2:rxandroid:${rxAndroidVersion}",
-            cardView         : "com.android.support:cardview-v7:${cardViewVersion}"
+            cardView         : "com.android.support:cardview-v7:${cardViewVersion}",
+            gson             : "com.google.code.gson:gson:${gsonVersion}",
+            apacheCommonsIO  : "commons-io:commons-io:${commonsIOVersion}",
+            lifecycle        : "android.arch.lifecycle:extensions:${lifecycleVersion}",
+            jodaTime         : "joda-time:joda-time:${jodaTimeVersion}"
     ]
 
     testDependencies = [
