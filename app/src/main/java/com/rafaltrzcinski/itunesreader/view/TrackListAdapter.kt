@@ -8,7 +8,8 @@ import com.rafaltrzcinski.itunesreader.R
 import com.rafaltrzcinski.itunesreader.domain.model.Track
 import com.rafaltrzcinski.itunesreader.domain.model.Track.LocalTrack
 import com.rafaltrzcinski.itunesreader.domain.model.Track.RemoteTrack
-import com.rafaltrzcinski.itunesreader.utils.DateFormat
+import com.rafaltrzcinski.itunesreader.utils.getYearFromDateString
+import com.rafaltrzcinski.itunesreader.utils.sortListByArtistNameDescending
 import kotlinx.android.synthetic.main.item_track.view.*
 
 
@@ -28,9 +29,14 @@ class TrackListAdapter : RecyclerView.Adapter<TrackListAdapter.ViewHolder>() {
 
     override fun getItemCount() = items.size
 
-    fun loadItems(items: List<Track>) {
-        this.items.clear()
-        this.items.addAll(items)
+    fun loadItems(newItems: List<Track>) {
+        items.addAll(newItems)
+        items.sortListByArtistNameDescending()
+        notifyDataSetChanged()
+    }
+
+    fun clearItems() {
+        items.clear()
         notifyDataSetChanged()
     }
 
@@ -55,7 +61,7 @@ class TrackListAdapter : RecyclerView.Adapter<TrackListAdapter.ViewHolder>() {
         private fun bindRemoteTrack(track: RemoteTrack) {
             itemView.artistName.text = track.artistName
             itemView.songTitle.text = track.trackName
-            itemView.releaseYear.text = "${DateFormat.getYearFromDateString(track.releaseDate)}"
+            itemView.releaseYear.text = "${track.releaseDate.getYearFromDateString()}"
         }
     }
 }

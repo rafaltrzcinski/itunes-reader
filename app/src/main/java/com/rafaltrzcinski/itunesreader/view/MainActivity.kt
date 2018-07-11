@@ -11,6 +11,7 @@ import android.view.MenuItem
 import com.rafaltrzcinski.itunesreader.R
 import com.rafaltrzcinski.itunesreader.controller.ResourceController
 import com.rafaltrzcinski.itunesreader.domain.model.Track
+import com.rafaltrzcinski.itunesreader.domain.state.DataSource
 import com.rafaltrzcinski.itunesreader.domain.state.DataSource.LOCAL
 import com.rafaltrzcinski.itunesreader.domain.state.DataSource.REMOTE
 import com.rafaltrzcinski.itunesreader.viewmodel.MainListViewModelFactory
@@ -27,12 +28,15 @@ class MainActivity : AppCompatActivity() {
                 .get(MainListViewModel::class.java)
     }
 
+    private val listToLoad: MutableList<DataSource> = mutableListOf(LOCAL)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         initRecyclerView()
         observeOnList()
+        invalidateList()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -43,13 +47,25 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         item?.let {
             it.isChecked = it.isChecked.not()
-
             when (it.itemId) {
-                R.id.actionLocal -> mainListViewModel.setDataSource(LOCAL)
-                R.id.actionRemote -> mainListViewModel.setDataSource(REMOTE)
+                R.id.actionLocal ->
+                    if (it.isChecked) listToLoad.add(LOCAL)
+                    else listToLoad.remove(LOCAL)
+                R.id.actionRemote ->
+                    if (it.isChecked) listToLoad.add(REMOTE)
+                    else listToLoad.remove(REMOTE)
+                else -> {}
             }
+            invalidateList()
         }
         return true
+    }
+
+    private fun invalidateList() {
+        tracksAdapter.clearItems()
+        listToLoad.forEach {
+            mainListViewModel.setDataSource(it)
+        }
     }
 
     private fun initRecyclerView() {
@@ -64,9 +80,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private val mainListObserver: Observer<List<Track>> =
-        Observer {
-            it?.let { tracksAdapter.loadItems(it) } ?: showConnectionError()
-        }
+            Observer {
+                it?.let { tracksAdapter.loadItems(it) } ?: showConnectionError()
+            }
 
     private fun showConnectionError() {
         AlertDialog.Builder(this).apply {

@@ -18,8 +18,6 @@ class MainListViewModel(resourceController: ResourceController) : ViewModel() {
     private val trackList = MediatorLiveData<List<Track>>()
 
     init {
-        dataSourceType.value = LOCAL
-
         val liveTrackList = Transformations.switchMap(dataSourceType) {
             repository = when (it) {
                 LOCAL -> LocalRepository(resourceController)
