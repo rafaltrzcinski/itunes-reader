@@ -1,12 +1,8 @@
 package com.rafaltrzcinski.itunesreader.viewmodel
 
 import android.arch.core.executor.testing.InstantTaskExecutorRule
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.Observer
-import com.nhaarman.mockito_kotlin.any
-import com.nhaarman.mockito_kotlin.doReturn
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.verify
+import android.arch.lifecycle.*
+import com.nhaarman.mockito_kotlin.*
 import com.rafaltrzcinski.itunesreader.data.LocalRepository
 import com.rafaltrzcinski.itunesreader.data.RemoteRepository
 import com.rafaltrzcinski.itunesreader.domain.model.Track
@@ -44,5 +40,15 @@ class MainListViewModelTest {
         viewModel.setDataSource(DataSource.LOCAL, query)
 
         verify(localRepositoryMock).getTrackList(query)
+    }
+
+    @Test
+    fun `should invoke loading items from remote repository when set remote data source on view model`() {
+        val query = ""
+        viewModel.getTrackList().observeForever(observerMock)
+
+        viewModel.setDataSource(DataSource.REMOTE, query)
+
+        verify(remoteRepositoryMock).getTrackList(query)
     }
 }
