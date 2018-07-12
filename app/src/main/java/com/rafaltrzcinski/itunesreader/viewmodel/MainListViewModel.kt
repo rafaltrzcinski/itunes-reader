@@ -16,6 +16,7 @@ class MainListViewModel(resourceController: ResourceController) : ViewModel() {
 
     private val dataSourceType = MutableLiveData<DataSource>()
     private val trackList = MediatorLiveData<List<Track>>()
+    private var queryList: String = ""
 
     init {
         val liveTrackList = Transformations.switchMap(dataSourceType) {
@@ -23,12 +24,13 @@ class MainListViewModel(resourceController: ResourceController) : ViewModel() {
                 LOCAL -> LocalRepository(resourceController)
                 else -> RemoteRepository()
             }
-            repository.getTrackList("a")
+            repository.getTrackList(queryList)
         }
         trackList.addSource(liveTrackList, trackList::setValue)
     }
 
-    fun setDataSource(source: DataSource) {
+    fun setDataSource(source: DataSource, query: String = "") {
+        queryList = query
         dataSourceType.value = source
     }
 

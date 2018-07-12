@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
+import com.jakewharton.rxbinding2.widget.RxTextView
 import com.rafaltrzcinski.itunesreader.R
 import com.rafaltrzcinski.itunesreader.controller.ResourceController
 import com.rafaltrzcinski.itunesreader.domain.model.Track
@@ -16,7 +17,11 @@ import com.rafaltrzcinski.itunesreader.domain.state.DataSource.LOCAL
 import com.rafaltrzcinski.itunesreader.domain.state.DataSource.REMOTE
 import com.rafaltrzcinski.itunesreader.viewmodel.MainListViewModelFactory
 import com.rafaltrzcinski.itunesreader.viewmodel.MainListViewModel
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
+import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity() {
 
@@ -27,8 +32,13 @@ class MainActivity : AppCompatActivity() {
                 .of(this, MainListViewModelFactory(resourceController))
                 .get(MainListViewModel::class.java)
     }
-
     private val listToLoad: MutableList<DataSource> = mutableListOf(LOCAL)
+    private val searchIntent: Observable<String> by lazy {
+        RxTextView.textChanges(searchField)
+                .skipInitialValue()
+                .debounce(500, TimeUnit.MILLISECONDS)
+                .map { "$it" }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +47,11 @@ class MainActivity : AppCompatActivity() {
         initRecyclerView()
         observeOnList()
         invalidateList()
+
+        searchIntent
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { invalidateList(it) }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -54,17 +69,16 @@ class MainActivity : AppCompatActivity() {
                 R.id.actionRemote ->
                     if (it.isChecked) listToLoad.add(REMOTE)
                     else listToLoad.remove(REMOTE)
-                else -> {}
             }
             invalidateList()
         }
         return true
     }
 
-    private fun invalidateList() {
+    private fun invalidateList(query: String = "") {
         tracksAdapter.clearItems()
         listToLoad.forEach {
-            mainListViewModel.setDataSource(it)
+            mainListViewModel.setDataSource(it, query)
         }
     }
 

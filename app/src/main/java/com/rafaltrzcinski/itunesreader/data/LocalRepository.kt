@@ -1,6 +1,5 @@
 package com.rafaltrzcinski.itunesreader.data
 
-import android.annotation.SuppressLint
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import com.google.gson.GsonBuilder
@@ -9,6 +8,7 @@ import com.rafaltrzcinski.itunesreader.controller.ResourceController
 import com.rafaltrzcinski.itunesreader.domain.model.Track
 import com.rafaltrzcinski.itunesreader.domain.model.Track.LocalTrack
 import com.rafaltrzcinski.itunesreader.view.StringToReleaseYearTypeAdapter
+import io.reactivex.Observable
 import org.apache.commons.io.FileUtils
 import java.io.File
 import java.io.FileReader
@@ -16,10 +16,14 @@ import java.io.FileReader
 
 class LocalRepository(private val resourceController: ResourceController) : DataRepository {
 
+    private var itemsList: List<LocalTrack>
     private val result: MutableLiveData<List<LocalTrack>> = MutableLiveData()
 
-    @Suppress("UNCHECKED_CAST")
-    override fun getTrackList(query: String): LiveData<List<Track>> {
+    init {
+        itemsList = prepareLocalItems()
+    }
+
+    private fun prepareLocalItems(): List<LocalTrack> {
         val source = resourceController.getAssets().open("songs-list.json")
 
         val file = File.createTempFile("temp-", "-songs")
@@ -30,8 +34,21 @@ class LocalRepository(private val resourceController: ResourceController) : Data
                 .registerTypeAdapter(Int::class.java, StringToReleaseYearTypeAdapter())
                 .create()
 
-        val itemsArray = gson.fromJson<Array<LocalTrack>>(json, Array<LocalTrack>::class.java)
-        result.value = itemsArray.toList()
+        return gson.fromJson<Array<LocalTrack>>(json, Array<LocalTrack>::class.java).toList()
+    }
+
+
+    @Suppress("UNCHECKED_CAST")
+    override fun getTrackList(query: String): LiveData<List<Track>> {
+        if (query.isNotBlank()) {
+            Observable.fromIterable(itemsList)
+                    .filter { it.artistName.contains(query) }
+                    .toList()
+                    .subscribe { items -> result.value = items }
+        } else {
+            result.value = itemsList
+        }
+
         return result as MutableLiveData<List<Track>>
     }
 }

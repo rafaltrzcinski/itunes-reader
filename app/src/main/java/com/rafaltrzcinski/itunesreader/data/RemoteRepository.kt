@@ -17,7 +17,7 @@ class RemoteRepository : DataRepository {
 
         val liveData = MutableLiveData<List<Track>>()
 
-        remote.searchTracks(query)
+        remote.searchTracks(if (query.isBlank()) "a" else query)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .timeout(5, TimeUnit.SECONDS)

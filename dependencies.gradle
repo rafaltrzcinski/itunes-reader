@@ -29,6 +29,7 @@ ext {
     commonsIOVersion = '2.6'
     lifecycleVersion = '1.1.1'
     jodaTimeVersion = '2.10'
+    rxBindingVersion = '2.1.1'
 
     appPlugins = [
             'com.android.application',
@@ -52,7 +53,8 @@ ext {
             gson             : "com.google.code.gson:gson:${gsonVersion}",
             apacheCommonsIO  : "commons-io:commons-io:${commonsIOVersion}",
             lifecycle        : "android.arch.lifecycle:extensions:${lifecycleVersion}",
-            jodaTime         : "joda-time:joda-time:${jodaTimeVersion}"
+            jodaTime         : "joda-time:joda-time:${jodaTimeVersion}",
+            rxBinding           : "com.jakewharton.rxbinding2:rxbinding-kotlin:${rxBindingVersion}",
     ]
 
     testDependencies = [
