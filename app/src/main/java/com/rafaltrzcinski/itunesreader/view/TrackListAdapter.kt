@@ -10,9 +10,6 @@ import com.rafaltrzcinski.itunesreader.domain.model.Track.LocalTrack
 import com.rafaltrzcinski.itunesreader.domain.model.Track.RemoteTrack
 import com.rafaltrzcinski.itunesreader.utils.getYearFromDateString
 import com.rafaltrzcinski.itunesreader.utils.sortByArtistName
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.item_track.view.*
 
 

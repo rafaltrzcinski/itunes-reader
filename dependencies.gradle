@@ -54,17 +54,19 @@ ext {
             apacheCommonsIO  : "commons-io:commons-io:${commonsIOVersion}",
             lifecycle        : "android.arch.lifecycle:extensions:${lifecycleVersion}",
             jodaTime         : "joda-time:joda-time:${jodaTimeVersion}",
-            rxBinding           : "com.jakewharton.rxbinding2:rxbinding-kotlin:${rxBindingVersion}",
+            rxBinding        : "com.jakewharton.rxbinding2:rxbinding-kotlin:${rxBindingVersion}",
     ]
 
     testDependencies = [
-            junit        : "junit:junit:${jUnitVersion}",
-            mockito      : "org.mockito:mockito-inline:${mockitoVersion}",
-            mockitoKotlin: "com.nhaarman:mockito-kotlin:${mockitoKotlinVersion}"
+            junit          : "junit:junit:${jUnitVersion}",
+            mockito        : "org.mockito:mockito-inline:${mockitoVersion}",
+            mockitoKotlin  : "com.nhaarman:mockito-kotlin:${mockitoKotlinVersion}",
+            archCoreTesting: "android.arch.core:core-testing:${lifecycleVersion}"
     ]
 
     androidTestDependencies = [
-            testRunner : "com.android.support.test:runner:${testRunnerVersion}",
-            espressCore: "com.android.support.test.espresso:espresso-core:${espressoCoreVersion}"
+            testRunner     : "com.android.support.test:runner:${testRunnerVersion}",
+            espressCore    : "com.android.support.test.espresso:espresso-core:${espressoCoreVersion}",
+            archCoreTesting: "android.arch.core:core-testing:${lifecycleVersion}"
     ]
 }
