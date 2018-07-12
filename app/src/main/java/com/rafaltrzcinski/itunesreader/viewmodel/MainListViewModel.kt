@@ -10,9 +10,9 @@ import com.rafaltrzcinski.itunesreader.domain.state.DataSource
 import com.rafaltrzcinski.itunesreader.domain.state.DataSource.LOCAL
 
 
-class MainListViewModel(resourceController: ResourceController) : ViewModel() {
-
-    private lateinit var repository: DataRepository
+class MainListViewModel(
+        localRepository: LocalRepository,
+        remoteRepository: RemoteRepository) : ViewModel() {
 
     private val dataSourceType = MutableLiveData<DataSource>()
     private val trackList = MediatorLiveData<List<Track>>()
@@ -20,9 +20,9 @@ class MainListViewModel(resourceController: ResourceController) : ViewModel() {
 
     init {
         val liveTrackList = Transformations.switchMap(dataSourceType) {
-            repository = when (it) {
-                LOCAL -> LocalRepository(resourceController)
-                else -> RemoteRepository()
+            val repository = when (it) {
+                LOCAL -> localRepository
+                else -> remoteRepository
             }
             repository.getTrackList(queryList)
         }

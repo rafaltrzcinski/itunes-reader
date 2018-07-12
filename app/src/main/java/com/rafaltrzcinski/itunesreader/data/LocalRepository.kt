@@ -23,7 +23,7 @@ class LocalRepository(private val resourceController: ResourceController) : Data
         itemsList = prepareLocalItems()
     }
 
-    private fun prepareLocalItems(): List<LocalTrack> {
+    fun prepareLocalItems(): List<LocalTrack> {
         val source = resourceController.getAssets().open("songs-list.json")
 
         val file = File.createTempFile("temp-", "-songs")

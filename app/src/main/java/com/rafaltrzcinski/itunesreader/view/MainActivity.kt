@@ -11,6 +11,8 @@ import android.view.MenuItem
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.rafaltrzcinski.itunesreader.R
 import com.rafaltrzcinski.itunesreader.controller.ResourceController
+import com.rafaltrzcinski.itunesreader.data.LocalRepository
+import com.rafaltrzcinski.itunesreader.data.RemoteRepository
 import com.rafaltrzcinski.itunesreader.domain.model.Track
 import com.rafaltrzcinski.itunesreader.domain.state.DataSource
 import com.rafaltrzcinski.itunesreader.domain.state.DataSource.LOCAL
@@ -29,7 +31,7 @@ class MainActivity : AppCompatActivity() {
     private val tracksAdapter: TrackListAdapter by lazy { TrackListAdapter() }
     private val mainListViewModel: MainListViewModel by lazy {
         ViewModelProviders
-                .of(this, MainListViewModelFactory(resourceController))
+                .of(this, MainListViewModelFactory(LocalRepository(resourceController), RemoteRepository()))
                 .get(MainListViewModel::class.java)
     }
     private val listToLoad: MutableList<DataSource> = mutableListOf(LOCAL)
