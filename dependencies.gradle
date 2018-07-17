@@ -30,11 +30,13 @@ ext {
     lifecycleVersion = '1.1.1'
     jodaTimeVersion = '2.10'
     rxBindingVersion = '2.1.1'
+    daggerVersion = '2.16'
 
     appPlugins = [
             'com.android.application',
             'kotlin-android',
-            'kotlin-android-extensions'
+            'kotlin-android-extensions',
+            'kotlin-kapt'
     ]
 
     appDependencies = [
@@ -55,6 +57,13 @@ ext {
             lifecycle        : "android.arch.lifecycle:extensions:${lifecycleVersion}",
             jodaTime         : "joda-time:joda-time:${jodaTimeVersion}",
             rxBinding        : "com.jakewharton.rxbinding2:rxbinding-kotlin:${rxBindingVersion}",
+            dagger           : "com.google.dagger:dagger:${daggerVersion}",
+            daggerSupport    : "com.google.dagger:dagger-android-support:${daggerVersion}"
+    ]
+
+    kaptDependencies = [
+            daggerCompiler : "com.google.dagger:dagger-compiler:${daggerVersion}",
+            daggerProcessor: "com.google.dagger:dagger-android-processor:${daggerVersion}"
     ]
 
     testDependencies = [

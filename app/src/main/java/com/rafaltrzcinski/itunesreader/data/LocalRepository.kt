@@ -2,9 +2,9 @@ package com.rafaltrzcinski.itunesreader.data
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
+import android.content.res.AssetManager
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonParser
-import com.rafaltrzcinski.itunesreader.controller.ResourceController
 import com.rafaltrzcinski.itunesreader.domain.model.Track
 import com.rafaltrzcinski.itunesreader.domain.model.Track.LocalTrack
 import com.rafaltrzcinski.itunesreader.view.StringToReleaseYearTypeAdapter
@@ -12,9 +12,10 @@ import io.reactivex.Observable
 import org.apache.commons.io.FileUtils
 import java.io.File
 import java.io.FileReader
+import javax.inject.Inject
 
 
-class LocalRepository(private val resourceController: ResourceController) : DataRepository {
+class LocalRepository @Inject constructor(private val assetsManager: AssetManager) : DataRepository {
 
     private var itemsList: List<LocalTrack>
     private val result: MutableLiveData<List<LocalTrack>> = MutableLiveData()
@@ -24,7 +25,7 @@ class LocalRepository(private val resourceController: ResourceController) : Data
     }
 
     fun prepareLocalItems(): List<LocalTrack> {
-        val source = resourceController.getAssets().open("songs-list.json")
+        val source = assetsManager.open("songs-list.json")
 
         val file = File.createTempFile("temp-", "-songs")
         FileUtils.copyInputStreamToFile(source, file)

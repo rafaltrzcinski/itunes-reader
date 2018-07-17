@@ -10,28 +10,29 @@ import android.view.Menu
 import android.view.MenuItem
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.rafaltrzcinski.itunesreader.R
-import com.rafaltrzcinski.itunesreader.controller.ResourceController
-import com.rafaltrzcinski.itunesreader.data.LocalRepository
-import com.rafaltrzcinski.itunesreader.data.RemoteRepository
 import com.rafaltrzcinski.itunesreader.domain.model.Track
 import com.rafaltrzcinski.itunesreader.domain.state.DataSource
 import com.rafaltrzcinski.itunesreader.domain.state.DataSource.LOCAL
 import com.rafaltrzcinski.itunesreader.domain.state.DataSource.REMOTE
 import com.rafaltrzcinski.itunesreader.viewmodel.MainListViewModelFactory
 import com.rafaltrzcinski.itunesreader.viewmodel.MainListViewModel
+import dagger.android.AndroidInjection
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
 
-    private val resourceController = ResourceController(this)
     private val tracksAdapter: TrackListAdapter by lazy { TrackListAdapter() }
+
+    @Inject lateinit var trackListViewModelFactory: MainListViewModelFactory
+
     private val mainListViewModel: MainListViewModel by lazy {
         ViewModelProviders
-                .of(this, MainListViewModelFactory(LocalRepository(resourceController), RemoteRepository()))
+                .of(this, trackListViewModelFactory)
                 .get(MainListViewModel::class.java)
     }
     private val listToLoad: MutableList<DataSource> = mutableListOf(LOCAL)
@@ -44,6 +45,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        AndroidInjection.inject(this)
+
         setContentView(R.layout.activity_main)
 
         initRecyclerView()

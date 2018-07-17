@@ -1,16 +1,15 @@
 package com.rafaltrzcinski.itunesreader.viewmodel
 
 import android.arch.lifecycle.*
-import com.rafaltrzcinski.itunesreader.controller.ResourceController
-import com.rafaltrzcinski.itunesreader.data.DataRepository
 import com.rafaltrzcinski.itunesreader.data.LocalRepository
 import com.rafaltrzcinski.itunesreader.data.RemoteRepository
 import com.rafaltrzcinski.itunesreader.domain.model.Track
 import com.rafaltrzcinski.itunesreader.domain.state.DataSource
 import com.rafaltrzcinski.itunesreader.domain.state.DataSource.LOCAL
+import javax.inject.Inject
 
 
-class MainListViewModel(
+class MainListViewModel @Inject constructor(
         localRepository: LocalRepository,
         remoteRepository: RemoteRepository) : ViewModel() {
 

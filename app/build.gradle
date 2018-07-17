@@ -30,6 +30,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     implementation appConfiguration.appDependencies.values()
+    kapt appConfiguration.kaptDependencies.values()
     testImplementation appConfiguration.testDependencies.values()
     androidTestImplementation appConfiguration.androidTestDependencies.values()
 }

@@ -4,9 +4,10 @@ import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
 import com.rafaltrzcinski.itunesreader.data.LocalRepository
 import com.rafaltrzcinski.itunesreader.data.RemoteRepository
+import javax.inject.Inject
 
 
-class MainListViewModelFactory(
+class MainListViewModelFactory @Inject constructor(
         private val localRepository: LocalRepository,
         private val remoteRepository: RemoteRepository) : ViewModelProvider.NewInstanceFactory() {
 
