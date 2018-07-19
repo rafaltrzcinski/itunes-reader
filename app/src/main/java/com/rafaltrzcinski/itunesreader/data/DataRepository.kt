@@ -1,9 +1,9 @@
 package com.rafaltrzcinski.itunesreader.data
 
-import android.arch.lifecycle.LiveData
 import com.rafaltrzcinski.itunesreader.domain.model.Track
+import io.reactivex.Single
 
 
 interface DataRepository {
-    fun getTrackList(query: String): LiveData<List<Track>>
+    fun getTrackList(query: String): Single<List<Track>>
 }

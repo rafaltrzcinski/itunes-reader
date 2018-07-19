@@ -1,7 +1,5 @@
 package com.rafaltrzcinski.itunesreader.data
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
 import android.content.res.AssetManager
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonParser
@@ -9,6 +7,9 @@ import com.rafaltrzcinski.itunesreader.domain.model.Track
 import com.rafaltrzcinski.itunesreader.domain.model.Track.LocalTrack
 import com.rafaltrzcinski.itunesreader.view.StringToReleaseYearTypeAdapter
 import io.reactivex.Observable
+import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import org.apache.commons.io.FileUtils
 import java.io.File
 import java.io.FileReader
@@ -17,8 +18,7 @@ import javax.inject.Inject
 
 class LocalRepository @Inject constructor(private val assetsManager: AssetManager) : DataRepository {
 
-    private var itemsList: List<LocalTrack>
-    private val result: MutableLiveData<List<LocalTrack>> = MutableLiveData()
+    private val itemsList: List<LocalTrack>
 
     init {
         itemsList = prepareLocalItems()
@@ -39,17 +39,14 @@ class LocalRepository @Inject constructor(private val assetsManager: AssetManage
     }
 
 
-    @Suppress("UNCHECKED_CAST")
-    override fun getTrackList(query: String): LiveData<List<Track>> {
-        if (query.isNotBlank()) {
+    override fun getTrackList(query: String): Single<List<Track>> =
             Observable.fromIterable(itemsList)
-                    .filter { it.artistName.contains(query) }
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .filter {
+                        if (query.isNotBlank()) it.artistName.contains(query)
+                        else true
+                    }
+                    .ofType(Track::class.java)
                     .toList()
-                    .subscribe { items -> result.value = items }
-        } else {
-            result.value = itemsList
-        }
-
-        return result as MutableLiveData<List<Track>>
-    }
 }
